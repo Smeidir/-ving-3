@@ -1,13 +1,16 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Ant{
     Pixel pixel;
     Coordinate current_coordinate;
     ArrayList<Coordinate> path;
+    Image image;
+    Random r = new Random();
 
-
-    public Ant(Pixel pixel){
+    public Ant(Pixel pixel, Image image){
         this.pixel = pixel;
+        this.image = image;
         this.pixel.set_ant(this);
         current_coordinate = pixel.get_coords();
         path = new ArrayList<Coordinate>();
@@ -27,6 +30,25 @@ public class Ant{
     }
     public Pixel get_pixel(){
         return pixel;
+    }
+    public boolean sniff(int epoch){
+        ArrayList<Pixel> neighbours = image.get_neighbours(current_coordinate);
+        Pixel best_neighbour = null;
+        if (r.nextDouble() > Math.pow(Parameters.epsilon, epoch)){
+            for (Pixel neighbour : neighbours){ //this is where the magic happens. 
+                
+        }
+    }
+        else{
+            best_neighbour = neighbours.get(r.nextInt(neighbours.size()));
+            move(best_neighbour.get_coords());
+        }
+
+        }
+    
+    public ArrayList<Coordinate> get_path(){
+        return path;
     }   
+
 
 }
