@@ -30,7 +30,7 @@ public class Coordinate {
   
           if (v instanceof Coordinate){
               Coordinate ptr = (Coordinate) v;
-              retVal = ptr.getX() == this.x && ptr.getY() == this.y;
+              retVal = (ptr.getX() == this.x && ptr.getY() == this.y);
           }
   
        return retVal;
@@ -41,10 +41,9 @@ public class Coordinate {
     }
     @Override
     public int hashCode() {
-        int hash = 7;
-        Integer hash_base = x*241 + y;
-        hash = 17 * hash + (hash_base != null ? hash_base.hashCode() : 0);
-        return hash;
+        int result = x;
+        result = 241 * result + y;
+        return result;
     }
 
     public static void main(String[] args) {

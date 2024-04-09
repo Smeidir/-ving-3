@@ -23,7 +23,8 @@ public class RouletteSelector{
     public Pixel select(){
         double total = 0;
         for (Pixel pixel : pixels){
-            double fitness = base_pixel.get_RGB_similarity(pixel) + pheromone_map.get(pixel.get_coords()) - 0.1*base_pixel.get_coords().euclidist(pixel.get_coords());
+
+            double fitness = base_pixel.get_RGB_similarity(pixel) + pheromone_map.get(pixel.get_coords()) - base_pixel.get_coords().euclidist(pixel.get_coords());
             cumulative_probabilities.add(fitness);
             total += fitness;
         }

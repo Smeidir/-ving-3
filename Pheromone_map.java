@@ -1,6 +1,8 @@
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Pheromone_map {
  
@@ -43,7 +45,7 @@ public class Pheromone_map {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 Coordinate coord = new Coordinate(j, i);
-                sb.append(pheromone_map.get(coord)).append(" ");
+                sb.append(coord);
             }
             sb.append("\n");
         }
@@ -60,9 +62,28 @@ public class Pheromone_map {
         }
     }
     public double get(Coordinate coord){
-        System.out.println(coord);
         return pheromone_map.get(coord);
         
     }
+    //make a function which prints out the coordinate keys of the pheromone map, with the highest tuple values first
+    public void printCoordinatesByValue() {
+        List<Map.Entry<Coordinate, Double>> sortedEntries = new ArrayList<>(pheromone_map.entrySet());
+        Collections.sort(sortedEntries, (e1, e2) -> e2.getValue().compareTo(e1.getValue()));
 
+        for (Map.Entry<Coordinate, Double> entry : sortedEntries) {
+            System.out.println(entry.getKey());
+        }
+    }
+    //make a function which checks whether some of the values are not present in the pheromone map key set. It should contain all tuples of x values from 0 to 240 and y from 0 to 160.
+    public boolean checkMissingCoordinates() {
+        for (int i = 0; i <= 240; i++) {
+            for (int j = 0; j <= 160; j++) {
+                Coordinate coord = new Coordinate(i, j);
+                if (!pheromone_map.containsKey(coord)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
