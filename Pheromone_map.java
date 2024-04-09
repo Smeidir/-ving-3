@@ -33,11 +33,9 @@ public class Pheromone_map {
 
     public void decay(){
         for (Double value : pheromone_map.values()){
-            value *= (1-Parameters.epsilon);
+            value *= (1-Parameters.decay_rate);
         }
     }
-
-
 
     //write a tostring function transforming the pheromonem map to a string based on the map values
     public String toString() {
@@ -60,6 +58,11 @@ public class Pheromone_map {
                 pheromone_map.put(coord, current_pheromone + Parameters.pheromone_rate);
             }
         }
+    }
+    public double get(Coordinate coord){
+        System.out.println(coord);
+        return pheromone_map.get(coord);
+        
     }
 
 }

@@ -31,13 +31,16 @@ public class Ant{
     public Pixel get_pixel(){
         return pixel;
     }
-    public boolean sniff(int epoch){
+    public void sniff(int epoch, Pheromone_map pheromone_map){
         ArrayList<Pixel> neighbours = image.get_neighbours(current_coordinate);
         Pixel best_neighbour = null;
+        RouletteSelector roulette = new RouletteSelector(this.pixel, pheromone_map);
         if (r.nextDouble() > Math.pow(Parameters.epsilon, epoch)){
-            for (Pixel neighbour : neighbours){ //this is where the magic happens. 
-                
-        }
+            for (Pixel neighbour : neighbours){ 
+                    roulette.add_pixel(neighbour);
+            }
+            best_neighbour = roulette.select();
+            move(best_neighbour.get_coords());
     }
         else{
             best_neighbour = neighbours.get(r.nextInt(neighbours.size()));
@@ -49,6 +52,12 @@ public class Ant{
     public ArrayList<Coordinate> get_path(){
         return path;
     }   
+
+    public void reset(){
+        path = new ArrayList<Coordinate>();
+        current_coordinate = pixel.get_coords();
+        path.add(current_coordinate);
+    }
 
 
 }

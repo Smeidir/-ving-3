@@ -11,14 +11,17 @@ class Main{
         ArrayList<Ant> ants = new ArrayList<Ant>();
         
         for (int i = 0; i < Parameters.epochs; i++){
-
+            image.pixel_map.values().stream().forEach(pixel -> pixel.ant.reset());
             for (Pixel pixel : image.pixel_map.values()){
-                pixel.ant.sniff(i);
-            }
+                for (int j  = 0; j < Parameters.path_length; j++){
+                    pixel.ant.sniff(i, pheromone_map);
+            }}
             pheromone_map.update_pheromones(ants);
             pheromone_map.decay();
-            System.out.println(pheromone_map);
+            
         }
+
+        image.segment();
     }
 
 

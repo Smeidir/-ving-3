@@ -39,7 +39,7 @@ public class Image {
         ArrayList<Pixel> neighbours = new ArrayList<Pixel>();
         for (int i = -1; i < 2; i++){
             for (int j = -1; j < 2; j++){
-                Coordinate neighbour_coords = new Coordinate(coords.getX() + i, coords.getY() + j);
+                Coordinate neighbour_coords = new Coordinate(coords.getX() + i, coords.getY() + j);          
                 if (pixel_map.containsKey(neighbour_coords) && !neighbour_coords.equals(coords)){ //da går det fint med -1 osv, og utenfor rekkevidden
                     neighbours.add(pixel_map.get(neighbour_coords));
                 }
@@ -55,6 +55,11 @@ public class Image {
         }
         return neighbours;
         }
+
+    public void segment() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'segment'");
+    }
 }
 
 
