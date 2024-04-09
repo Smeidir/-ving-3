@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class Image {
     int height;
     int width;
     int[][] visit_count;
+    ArrayList<Ant> ants = new ArrayList<>();
 
     public Image(String img_name){
 
@@ -51,9 +53,11 @@ public class Image {
         }
         for (Pixel p: pixel_map.values()){
             Ant ant = new Ant(p, this);
-            p.set_ant(ant); //overlødig men hvem bryr seg. er init. bra for lesbarhet            
+            p.set_ant(ant); //overlødig men hvem bryr seg. er init. bra for lesbarhet        
+            ants.add(ant);   
         }
     }
+
 
     public boolean checkAllCoordinates() {
         for (int x = 0; x <= 240; x++) {
@@ -124,8 +128,36 @@ public class Image {
                 
             }
         }
+        return true; //endre seff
     }
 
+    public void print_image(){ //ren copilot
+         // Create a BufferedImage object with the same dimensions as the int[][] array
+         BufferedImage image2 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+         // Iterate over the int[][] array and set the pixel color based on the value
+         for (int x = 0; x <width; x++) {
+             for (int y = 0; y < height; y++) {
+
+                 int value = visit_count[x][y];
+                 Color color = new Color(value, 0, 0);
+
+                 image2.setRGB(x, y, color.getRGB()); // Set the pixel color in the BufferedImage
+             }
+         }
+ 
+         // Save the BufferedImage as an image file
+         try {
+             File output = new File("output.png");
+             ImageIO.write(image2, "png", output);
+             System.out.println("Image saved successfully.");
+         } catch (IOException e) {
+             System.out.println("Failed to save the image.");
+             e.printStackTrace();
+         }
+
+        }
+ 
 }
 
 
