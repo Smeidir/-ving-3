@@ -3,6 +3,6 @@ public class Parameters {
     public static final double epsilon = 0.8;
     public static final double decay_rate = 0.1;
     public static final double pheromone_rate = 1;
-    public static final double epochs = 20;
+    public static final double epochs = 50;
     public static final int path_length = 20;
 }
