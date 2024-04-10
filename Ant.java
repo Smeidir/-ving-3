@@ -35,19 +35,13 @@ public class Ant{
         ArrayList<Pixel> neighbours = image.get_neighbours(current_coordinate);
         Pixel best_neighbour = null;
         RouletteSelector roulette = new RouletteSelector(this.pixel, pheromone_map);
-        if (r.nextDouble() > Math.pow(Parameters.epsilon, epoch)){
-            for (Pixel neighbour : neighbours){ 
-                    roulette.add_pixel(neighbour);
-            }
-            best_neighbour = roulette.select();
-            move(best_neighbour.get_coords());
+        for (Pixel neighbour : neighbours){ 
+                roulette.add_pixel(neighbour);
+        }
+        best_neighbour = roulette.select();
+        move(best_neighbour.get_coords());
     }
-        else{
-            best_neighbour = neighbours.get(r.nextInt(neighbours.size()));
-            move(best_neighbour.get_coords());
-        }
 
-        }
     
     public ArrayList<Coordinate> get_path(){
         return path;

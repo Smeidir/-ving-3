@@ -24,12 +24,11 @@ public class RouletteSelector{
         double total = 0;
         for (Pixel pixel : pixels){
 
-            double fitness = 10/base_pixel.get_RGB_similarity(pixel)+ pheromone_map.get(pixel.get_coords()) +0.5*base_pixel.get_coords().euclidist(pixel.get_coords());
-            //System.out.println("Bae pixel rgb: " + base_pixel.get_RGB_similarity(pixel) + " Pheromone: " + pheromone_map.get(pixel.get_coords()) + " Distance: " + base_pixel.get_coords().euclidist(pixel.get_coords()));
+            Double fitness = 0.1*base_pixel.get_RGB_similarity(pixel)+  pheromone_map.get(pixel.get_coords()) -base_pixel.get_coords().euclidist(pixel.get_coords());
             cumulative_probabilities.add(fitness);
             total += fitness;
         }
-        double total2 = total;//tihi 
+        Double total2 = total;
         cumulative_probabilities = new ArrayList<Double>(cumulative_probabilities.stream().map(x -> x/total2).collect(Collectors.toList()));
         double rand = random.nextDouble();
         for (int i=0; i < cumulative_probabilities.size(); i++){
@@ -38,6 +37,9 @@ public class RouletteSelector{
                 return pixels.get(i);
             }
         }
-        return pixels.get(pixels.size()-1); //i tilfelle 1? kan det skje?
+        
+        throw new IllegalArgumentException("No pixel selected");
+
+        //return pixels.get(pixels.size()-1); //i tilfelle 1? kan det skje?
     }
 }

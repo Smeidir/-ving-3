@@ -41,7 +41,7 @@ public class Pixel {
         return ant;
     } 
     public double get_RGB_similarity(Pixel other){
-        double similarity = Math.sqrt(Math.pow(R-other.getR(),2) + Math.pow(G-other.getG(),2) + Math.pow(B-other.getB(),2));
+        double similarity = 255-Math.sqrt(Math.pow(R-other.getR(),2) + Math.pow(G-other.getG(),2) + Math.pow(B-other.getB(),2));
         return similarity;
     }
 }

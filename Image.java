@@ -40,7 +40,7 @@ public class Image {
                     int green = (rgb >> 8) & 0xFF;
                     int blue = rgb & 0xFF;
     
-                    Pixel pixel = new Pixel(red, green, blue, col, row, pixel_number);
+                    Pixel pixel = new Pixel(255, green, blue, col, row, pixel_number);
                     pixel_number++;
                     pixel_map.put(pixel.get_coords(), pixel);
                 }
@@ -134,18 +134,14 @@ public class Image {
     public void print_image(){ //ren copilot
          // Create a BufferedImage object with the same dimensions as the int[][] array
          BufferedImage image2 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
          // Iterate over the int[][] array and set the pixel color based on the value
          for (int x = 0; x <width; x++) {
              for (int y = 0; y < height; y++) {
-
                  int value = visit_count[x][y];
                  Color color = new Color(value, 0, 0);
-
                  image2.setRGB(x, y, color.getRGB()); // Set the pixel color in the BufferedImage
              }
          }
- 
          // Save the BufferedImage as an image file
          try {
              File output = new File("output.png");
