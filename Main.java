@@ -1,9 +1,6 @@
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.imageio.ImageIO;
 
 class Main{ 
     HashMap<Coordinate, Pixel> pixel_map = new HashMap<Coordinate, Pixel>();

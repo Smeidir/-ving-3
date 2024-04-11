@@ -7,10 +7,12 @@ public class Ant{
     ArrayList<Coordinate> path;
     Image image;
     Random r = new Random();
+    int[] feature_vector;
 
     public Ant(Pixel pixel, Image image){
         this.pixel = pixel;
         this.image = image;
+        this.feature_vector = pixel.get_feature_vector();
         this.pixel.set_ant(this);
         current_coordinate = pixel.get_coords();
         path = new ArrayList<Coordinate>();
@@ -18,16 +20,15 @@ public class Ant{
     }
 
     public void move(Coordinate new_coordinate){ 
-        if (new_coordinate.neighbours(current_coordinate)){ //hvis koden kjører tregt kan man kanskje fjerne denne, hvis man sjekker andre steder
-            current_coordinate = new_coordinate;
-            path.add(current_coordinate);
-        }
-        else{
-            throw new IllegalArgumentException("Invalid move, not a neighbouring coordinate. Current coordinate: " + current_coordinate 
-            + " Attempted move-coordinate: " + new_coordinate);
+        feature_vector += this.next();
+        return;
             
-        }
+        
     }
+    public void next(){
+        return;
+    }
+
     public Pixel get_pixel(){
         return pixel;
     }
@@ -55,3 +56,9 @@ public class Ant{
 
 
 }
+/*
+ * Spm: Du legger til de oppdaterte feature vektorene som clustering, med pointers til sin originale pixel?
+ * Regner du ut avstand til alle andre pixler da veldig mange ganger per maur?
+ * Når du assigner cluster centers assigner du selv de som er i andre clusters?
+ * Feromoner oppdateres fortløpende?
+ */

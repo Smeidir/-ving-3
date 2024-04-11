@@ -5,4 +5,6 @@ public class Parameters {
     public static final double pheromone_rate = 0.3;
     public static final double epochs = 20;
     public static final int path_length = 30;
+    public static final double delta = 0.12;
+    public static final double threshhold_density = 0.5;
 }

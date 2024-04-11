@@ -5,6 +5,7 @@ public class Pixel {
     Coordinate coords;
     int id;
     Ant ant;
+    
     public Pixel(int R, int G, int B, int x, int y, int id){
         this.R = R;
         this.G = G;
@@ -44,4 +45,5 @@ public class Pixel {
         double similarity = 255-Math.sqrt(Math.pow(R-other.getR(),2) + Math.pow(G-other.getG(),2) + Math.pow(B-other.getB(),2));
         return similarity;
     }
+
 }
