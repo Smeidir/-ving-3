@@ -18,8 +18,8 @@ class Main{
                 ant.add_to_colony(segment);
                 image.segments.add(segment);
                 ant.sniff();
-                System.out.println("Nå har vi " + image.segments.size() + " segmenter");
-                System.out.println("Det er så mange pixler i segmentene til sammen: " + image.segments.stream().mapToInt(s -> s.pixels.size()).sum());
+                //System.out.println("Nå har vi " + image.segments.size() + " segmenter");
+                //System.out.println("Det er så mange pixler i segmentene til sammen: " + image.segments.stream().mapToInt(s -> s.pixels.size()).sum());
             }
         }
         ArrayList<Segment> segments_to_remove = new ArrayList<Segment>();
@@ -41,9 +41,11 @@ class Main{
                 }
                    
             }
+        System.out.println("Antall segmenter før: " + image.segments.size());
         image.segments.removeAll(segments_to_remove);
-        System.out.println(image.segments.size());
+        System.out.println("Antall segmenter etter: " +image.segments.size());
         image.colorSegments();
+        image.saveSegmentation();
 
     }
 

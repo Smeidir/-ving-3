@@ -1,26 +1,29 @@
 public class Pixel {
-    int R;
-    int G;
-    int B;
+    float R;
+    float G;
+    float B;
     Coordinate coords;
     int id;
     Ant ant;
     Segment segment;
 
-    public Pixel(int R, int G, int B, int x, int y, int id){
+    public Pixel(float R, float G, float B, int x, int y, int id){
         this.R = R;
         this.G = G;
         this.B = B;
         coords = new Coordinate(x, y);
         this.id = id;
     }
-    public int getR(){
+    
+    public float getR(){ //L
         return R;
     }
-    public int getG(){
+    
+    public float getG(){//A
         return G;
     }   
-    public int getB(){
+    
+    public float getB(){//B in LAB system
         return B;
     }
     public int getX(){
@@ -32,8 +35,8 @@ public class Pixel {
     public Coordinate get_coords(){
         return coords;
     }
-    public int[] get_feature_vector(){
-        return new int[]{R, G, B};
+    public float[] get_feature_vector(){
+        return new float[]{R, G, B};
     }
     public void set_ant(Ant ant){
         this.ant = ant;

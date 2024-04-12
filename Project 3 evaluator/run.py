@@ -37,7 +37,6 @@ def comparePics(studentPic, optimalSegmentPic):
 	global pixelRangeCheck
 
 	height, width = studentPic.shape
-
 	counter = 0 #counts the number of similar pics
 	numberOfBlackPixels = 0
 	for w in range(width):
@@ -59,7 +58,7 @@ def comparePics(studentPic, optimalSegmentPic):
 							break
 						for h2 in range(h - pixelRangeCheck, h + pixelRangeCheck + 1):
 							if(w2 >=0 and h2 >= 0 and w2 < width and h2 < height):
-
+								
 								color2 = optimalSegmentPic[h2][w2]
 								if( color1 - colorValueSlackRange< color2  and color2 < colorValueSlackRange + color1):
 									correctFound = True

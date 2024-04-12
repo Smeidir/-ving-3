@@ -1,6 +1,6 @@
 public class Distance {
 
-    public static double Eclidean(int[] a, int[] b){
+    public static double Eclidean(float[] a, float[] b){
         double sum = 0;
         for (int i = 0; i < a.length; i++){
             sum += Math.pow(a[i]-b[i], 2);

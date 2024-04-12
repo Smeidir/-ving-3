@@ -35,7 +35,7 @@ public class Segment {
         double deviation = 0;
         Pixel centroid = this.get_centroid();
         for (Pixel pixel : pixels){
-            deviation += pixel.get_RGB_similarity(centroid);
+            deviation += pixel.get_RGB_dissimilarity(centroid);
         }
         return deviation;
     }
@@ -57,7 +57,7 @@ public class Segment {
             ArrayList<Pixel> neighbours = this.image.get_neighbours(pixel.get_coords());
             for (Pixel neighbour : neighbours){
                 if (!pixels.contains(neighbour)){
-                    edge_value += pixel.get_RGB_similarity(neighbour);
+                    edge_value += pixel.get_RGB_dissimilarity(neighbour);
                 }
             }
         }

@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -180,6 +181,40 @@ public class Image {
         int green = random.nextInt(256);
         int blue = random.nextInt(256);
         return new Color(red, green, blue);
+    }
+
+    public void saveSegmentation(){
+        String file_name = Parameters.img_name + "_segmented";  
+        int[][] segmentation = new int[height][width];
+        for (int i = 0; i<height; i++){
+            for (int j = 0; j < width; j++){
+                segmentation[i][j] = 255;
+            }
+        }
+        for (Segment segment : segments){
+            for (Pixel pixel : segment.get_neighbouring_pixels()){
+                segmentation[pixel.getX()][pixel.getY()] = 0;
+            }
+        }  
+        try {
+            FileWriter writer = new FileWriter(file_name + ".txt");
+            for (int i = 0; i < height; i++) {
+                for (int j = 0; j < width; j++) {
+                    if (j ==0){
+                        writer.write(""+segmentation[i][j]);//stygt men må til
+                    }
+                    else{
+                        writer.write("," + segmentation[i][j]);
+                    }
+                }
+                writer.write('\n');
+            }
+            writer.close();
+            System.out.println("Segmentation saved successfully.");
+        } catch (IOException e) {
+            System.out.println("Failed to save the segmentation.");
+            e.printStackTrace();
+        }
     }
  
 }

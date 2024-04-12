@@ -7,7 +7,7 @@ public class Ant{
     ArrayList<Coordinate> path;
     Image image;
     Random r = new Random();
-    int[] feature_vector;
+    float[] feature_vector;
     boolean has_colony = false;
     Segment segment;
 

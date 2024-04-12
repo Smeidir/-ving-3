@@ -1,5 +1,5 @@
 public class Parameters {
-    public static final String img_name = "Project 3 training_images\\86016\\Test image.jpg";
+    public static final String img_name = "Project 3 training_images\\118035\\Test image.jpg";
     public static final double epsilon = 0.95;
     public static final double decay_rate = 0.2;
     public static final double pheromone_rate = 0.3;
