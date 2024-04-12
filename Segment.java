@@ -67,6 +67,29 @@ public class Segment {
         this.pixels.add(ant.get_pixel());
         ant.pixel.segment = this;
     }
+    public ArrayList<Pixel> get_neighbouring_pixels(){
+        ArrayList<Pixel> neighbouring_pixels = new ArrayList<Pixel>();
+        for (Pixel pixel : pixels){
+            ArrayList<Pixel> neighbours = this.image.get_neighbours(pixel.get_coords());
+            for (Pixel neighbour : neighbours){
+                if (!pixels.contains(neighbour)){
+                    neighbouring_pixels.add(neighbour);
+                }
+            }
+        }
+        return  neighbouring_pixels;
+
+    }
+
+    public ArrayList<Segment> get_neighbouring_segments(){
+        ArrayList<Segment> neighbouring_segments = new ArrayList<Segment>();
+        for (Pixel pixel: this.get_neighbouring_pixels()){
+            if (!neighbouring_segments.contains(pixel.segment)){
+                neighbouring_segments.add(pixel.segment);
+            }
+        }
+        return neighbouring_segments;
+    }
 
     //TODO: fucntion get edge pixels?
 

@@ -22,16 +22,31 @@ class Main{
                 System.out.println("Det er så mange pixler i segmentene til sammen: " + image.segments.stream().mapToInt(s -> s.pixels.size()).sum());
             }
         }
-        for(Segment segment: segments){
+        ArrayList<Segment> segments_to_remove = new ArrayList<Segment>();
+        for(Segment segment: image.segments){
+            
             if (segment.pixels.size() < image.pixel_map.size()/Parameters.max_segments){
+                Segment most_similar = null;
+                double similarity = 10000.0;
                 
-                image.segments.remove(segment);
+                Pixel centroid = segment.get_centroid();
+                for (Segment other_segment : segment.get_neighbouring_segments()){
+                     double dissimilarity = centroid.get_RGB_dissimilarity(other_segment.get_centroid()); //høyere verdi er mer forskjellig
+                        if (dissimilarity < similarity){
+                            other_segment.pixels.addAll(segment.pixels);
+                            most_similar = other_segment;
+                            segments_to_remove.add(segment);
+                        }
+                    }
+                }
+                   
             }
-        }
+        image.segments.removeAll(segments_to_remove);
         System.out.println(image.segments.size());
         image.colorSegments();
 
     }
+
 
 
 }
