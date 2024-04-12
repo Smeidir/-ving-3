@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Ant",
+            "request": "launch",
+            "mainClass": "Ant",
+            "projectName": "Øving 3_8e1d4d29"
+        },
+        {
+            "type": "java",
             "name": "Coordinate",
             "request": "launch",
             "mainClass": "Coordinate",

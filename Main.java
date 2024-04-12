@@ -11,22 +11,26 @@ class Main{
         Pheromone_map pheromone_map = new Pheromone_map(image.width, image.height);
         ArrayList<Ant> ants = new ArrayList<Ant>();
         ants = image.ants;
-        
-        for (int i = 0; i < Parameters.epochs; i++){
-            ants.stream().forEach(ant -> ant.reset());
-            int k = i;
-            for (int j  = 0; j < Parameters.path_length; j++){
-                ants.stream().forEach(ant -> ant.sniff(k, pheromone_map));
+
+        for (Ant ant : ants){
+            if (!ant.has_colony()){
+                Segment segment = new Segment(image);
+                ant.add_to_colony(segment);
+                image.segments.add(segment);
+                ant.sniff();
+                System.out.println("Nå har vi " + image.segments.size() + " segmenter");
+                System.out.println("Det er så mange pixler i segmentene til sammen: " + image.segments.stream().mapToInt(s -> s.pixels.size()).sum());
             }
-            System.out.println(image.pixel_map.get(new Coordinate(15,15)).ant.get_path());
-            pheromone_map.update_pheromones(ants);
-            pheromone_map.decay();
-            System.out.println(i);
-            
         }
-        image.create_visit_count();
-        image.print_image();
-        image.segment();
+        for(Segment segment: segments){
+            if (segment.pixels.size() < image.pixel_map.size()/Parameters.max_segments){
+                
+                image.segments.remove(segment);
+            }
+        }
+        System.out.println(image.segments.size());
+        image.colorSegments();
+
     }
 
 

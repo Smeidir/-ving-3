@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -40,7 +41,7 @@ public class Image {
                     int green = (rgb >> 8) & 0xFF;
                     int blue = rgb & 0xFF;
     
-                    Pixel pixel = new Pixel(255, green, blue, col, row, pixel_number);
+                    Pixel pixel = new Pixel(red, green, blue, col, row, pixel_number);
                     pixel_number++;
                     pixel_map.put(pixel.get_coords(), pixel);
                 }
@@ -153,6 +154,33 @@ public class Image {
          }
 
         }
+    public void colorSegments() {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        for (Segment segment : segments) {
+            Color color = getRandomColor();
+            for (Pixel pixel : segment.pixels) {
+                image.setRGB(pixel.getX(), pixel.getY(), color.getRGB());
+            }
+        }
+
+        try {
+            File output = new File("output.png");
+            ImageIO.write(image, "png", output);
+            System.out.println("Image saved successfully.");
+        } catch (IOException e) {
+            System.out.println("Failed to save the image.");
+            e.printStackTrace();
+        }
+    }
+
+    private Color getRandomColor() {
+        Random random = new Random();
+        int red = random.nextInt(256);
+        int green = random.nextInt(256);
+        int blue = random.nextInt(256);
+        return new Color(red, green, blue);
+    }
  
 }
 

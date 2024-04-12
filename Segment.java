@@ -4,6 +4,7 @@ public class Segment {
 
     ArrayList<Pixel> pixels = new ArrayList<Pixel>();  
     Image image;
+    Ant start_ant;
 
     public Segment(Image image){
         this.image = image;
@@ -61,6 +62,10 @@ public class Segment {
             }
         }
         return edge_value;
+    }
+    public void add(Ant ant){
+        this.pixels.add(ant.get_pixel());
+        ant.pixel.segment = this;
     }
 
     //TODO: fucntion get edge pixels?

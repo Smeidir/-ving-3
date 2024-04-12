@@ -5,7 +5,8 @@ public class Pixel {
     Coordinate coords;
     int id;
     Ant ant;
-    
+    Segment segment;
+
     public Pixel(int R, int G, int B, int x, int y, int id){
         this.R = R;
         this.G = G;
@@ -32,7 +33,7 @@ public class Pixel {
         return coords;
     }
     public int[] get_feature_vector(){
-        return new int[]{R, G, B, coords.getX(), coords.getY()};
+        return new int[]{R, G, B};
     }
     public void set_ant(Ant ant){
         this.ant = ant;

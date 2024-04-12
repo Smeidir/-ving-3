@@ -8,6 +8,8 @@ public class Ant{
     Image image;
     Random r = new Random();
     int[] feature_vector;
+    boolean has_colony = false;
+    Segment segment;
 
     public Ant(Pixel pixel, Image image){
         this.pixel = pixel;
@@ -19,31 +21,23 @@ public class Ant{
         path.add(current_coordinate);
     }
 
-    public void move(Coordinate new_coordinate){ 
-        feature_vector += this.next();
-        return;
-            
-        
-    }
-    public void next(){
-        return;
-    }
-
     public Pixel get_pixel(){
         return pixel;
     }
-    public void sniff(int epoch, Pheromone_map pheromone_map){
+    public void sniff(){
         ArrayList<Pixel> neighbours = image.get_neighbours(current_coordinate);
-        Pixel best_neighbour = null;
-        RouletteSelector roulette = new RouletteSelector(this.pixel, pheromone_map);
-        for (Pixel neighbour : neighbours){ 
-                roulette.add_pixel(neighbour);
+        for (int i = 0; i < neighbours.size(); i++){
+            if (Distance.Eclidean(this.pixel.get_feature_vector(), neighbours.get(i).get_feature_vector()) < Parameters.similarity_index && !neighbours.get(i).get_ant().has_colony()){
+                neighbours.get(i).get_ant().add_to_colony(this.segment);
+                ArrayList<Pixel> potential_neighbours = image.get_neighbours(neighbours.get(i).get_coords());
+                potential_neighbours.removeAll(neighbours); //if already in the list, we dont need to add them twice
+                potential_neighbours.removeAll(segment.get_pixels()); //if already in segment, we dont need to check
+                neighbours.addAll(potential_neighbours);
+            }
         }
-        best_neighbour = roulette.select();
-        move(best_neighbour.get_coords());
     }
 
-    
+
     public ArrayList<Coordinate> get_path(){
         return path;
     }   
@@ -54,7 +48,26 @@ public class Ant{
         path.add(current_coordinate);
     }
 
+    public boolean has_colony(){
+        return !(this.segment == null);
+    }
 
+    public void add_to_colony(Segment segment){
+        segment.add(this);
+        this.segment = segment;
+    }
+    public void move(Coordinate new_coordinate){
+        current_coordinate = new_coordinate;
+        path.add(new_coordinate);
+    }
+
+    public static void main(String[] args) {
+
+        Pixel pixel = new Pixel(0, 0, 0, 0, 0, 0);
+        Image image = new Image("test.jpg");
+        Ant ant = new Ant(null, null);
+        System.out.println(ant.has_colony());
+    }
 }
 /*
  * Spm: Du legger til de oppdaterte feature vektorene som clustering, med pointers til sin originale pixel?
