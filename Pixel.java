@@ -6,6 +6,7 @@ public class Pixel {
     int id;
     Ant ant;
     Segment segment;
+    boolean sniffed = false;
 
     public Pixel(float R, float G, float B, int x, int y, int id){
         this.R = R;
@@ -36,7 +37,7 @@ public class Pixel {
         return coords;
     }
     public float[] get_feature_vector(){
-        return new float[]{R, G, B};
+        return new float[]{0.5f*R, G, B};
     }
     public void set_ant(Ant ant){
         this.ant = ant;
@@ -49,5 +50,6 @@ public class Pixel {
         double similarity = Math.sqrt(Math.pow(R-other.getR(),2) + Math.pow(G-other.getG(),2) + Math.pow(B-other.getB(),2));
         return similarity;
     }
+    
 
 }

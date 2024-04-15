@@ -34,6 +34,9 @@ public class Ant{
                 potential_neighbours.removeAll(segment.get_pixels()); //if already in segment, we dont need to check
                 neighbours.addAll(potential_neighbours);
             }
+            else if(Distance.Eclidean(this.pixel.get_feature_vector(), neighbours.get(i).get_feature_vector()) > Parameters.similarity_index && !neighbours.get(i).get_ant().has_colony()){
+                neighbours.get(i).sniffed = true;
+            }
         }
     }
 
@@ -59,14 +62,6 @@ public class Ant{
     public void move(Coordinate new_coordinate){
         current_coordinate = new_coordinate;
         path.add(new_coordinate);
-    }
-
-    public static void main(String[] args) {
-
-        Pixel pixel = new Pixel(0, 0, 0, 0, 0, 0);
-        Image image = new Image("test.jpg");
-        Ant ant = new Ant(null, null);
-        System.out.println(ant.has_colony());
     }
 }
 /*

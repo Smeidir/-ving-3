@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Segment {
 
@@ -89,6 +90,19 @@ public class Segment {
             }
         }
         return neighbouring_segments;
+    }
+    public ArrayList<Pixel> get_edge_Pixels(){
+        HashSet<Pixel> edge_pixels = new HashSet<Pixel>();
+        for (Pixel pixel : this.get_neighbouring_pixels()){//alle nabopixlene til segmentet
+            for (Pixel pot_edge : this.image.get_neighbours(pixel.get_coords())){ //naboene til naboene, altså de ytterse i segmentet og de lenger inn i fremmede segment
+                if (this.pixels.contains(pot_edge)){//hvis det er ytterst i segmentet
+                    edge_pixels.add(pot_edge); //legg til. Er set, så alle er bare med en gang.
+                }
+            }
+            
+        }
+        return new ArrayList<Pixel>(edge_pixels);
+
     }
 
     //TODO: fucntion get edge pixels?

@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.image.AreaAveragingScaleFilter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
@@ -184,37 +185,100 @@ public class Image {
     }
 
     public void saveSegmentation(){
-        String file_name = Parameters.img_name + "_segmented";  
-        int[][] segmentation = new int[height][width];
-        for (int i = 0; i<height; i++){
-            for (int j = 0; j < width; j++){
-                segmentation[i][j] = 255;
-            }
-        }
-        for (Segment segment : segments){
-            for (Pixel pixel : segment.get_neighbouring_pixels()){
-                segmentation[pixel.getX()][pixel.getY()] = 0;
-            }
-        }  
-        try {
-            FileWriter writer = new FileWriter(file_name + ".txt");
-            for (int i = 0; i < height; i++) {
-                for (int j = 0; j < width; j++) {
-                    if (j ==0){
-                        writer.write(""+segmentation[i][j]);//stygt men må til
-                    }
-                    else{
-                        writer.write("," + segmentation[i][j]);
-                    }
+        String file_name = "Project 3 evaluator\\student_segments\\" +  Integer.parseInt(Parameters.img_name.replaceAll("[^0-9]", "").substring(1)) +"_border_segmented.jpg";  
+
+        
+        try{
+        BufferedImage outputImage = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (x == 0 || y == 0){
+                    outputImage.setRGB(x,y, 0);
                 }
-                writer.write('\n');
+                else if((this.pixel_map.get(new Coordinate(x,y)).sniffed)){
+                    outputImage.setRGB(x,y, 0);
+                } else {
+                    outputImage.setRGB(x, y, Color.WHITE.getRGB());
+                }
             }
-            writer.close();
-            System.out.println("Segmentation saved successfully.");
-        } catch (IOException e) {
-            System.out.println("Failed to save the segmentation.");
-            e.printStackTrace();
         }
+        ArrayList<Pixel> edges = this.get_all_edges();
+        for (Pixel pixel : pixel_map.values()){
+            if(pixel.sniffed){
+                if (!edges.contains(pixel)){
+                    outputImage.setRGB(pixel.getX(),pixel.getY(), Color.WHITE.getRGB());
+                }
+            }
+        }
+
+
+        ImageIO.write(outputImage, "jpg", new File(file_name));
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+public void saveSegmentationGreen(){
+    String file_name = "Project 3 evaluator\\student_segments\\" +  Integer.parseInt(Parameters.img_name.replaceAll("[^0-9]", "").substring(1)) +"_green_segmented.jpg";  
+
+    
+    try{
+    BufferedImage imgBuffer = ImageIO.read(new File(image_name));
+    BufferedImage outputImage = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            if (x == 0 || y == 0){
+                outputImage.setRGB(x,y, Color.GREEN.getRGB());
+            }
+            else if((this.pixel_map.get(new Coordinate(x,y)).sniffed)){
+                outputImage.setRGB(x,y, Color.GREEN.getRGB());
+            } else {
+                outputImage.setRGB(x, y, imgBuffer.getRGB(x,y));
+            }
+        }
+    }
+    ArrayList<Pixel> edges = this.get_all_edges();
+    for (Pixel pixel : pixel_map.values()){
+        if(pixel.sniffed){
+            if (!edges.contains(pixel)){
+                outputImage.setRGB(pixel.getX(),pixel.getY(), imgBuffer.getRGB(pixel.getX(),pixel.getY()));
+            }
+        }
+    }
+
+
+    ImageIO.write(outputImage, "jpg", new File(file_name));
+} catch (IOException e) {
+    e.printStackTrace();
+}
+}
+    public ArrayList<Pixel> get_all_edges(){
+        ArrayList<Pixel> edges = new ArrayList<>();
+        for (Segment s:this.segments){
+            edges.addAll(s.get_edge_Pixels());
+        }
+        return edges;
+
+    }
+    public ArrayList<Segment> get_lowest_amount_segments(){
+        ArrayList<Segment> segment = new ArrayList<>();
+        HashMap<Segment, ArrayList<Segment>> segmap = new HashMap<>();
+        for (Segment s : this.segments){
+            segmap.put(s, s.get_neighbouring_segments());
+        }
+        ArrayList<Segment> segments_left = new ArrayList<>(this.segments);
+        while (segments_left.size()!= 0){
+            Segment next_segment = segments_left.stream().max((x,y) -> ((Integer)segmap.get(x).size()).compareTo(((Integer) segmap.get(y).size()))).orElse(null);
+            System.out.println(next_segment);
+            segment.add(next_segment);
+            segments_left.remove(next_segment);
+            for (Map.Entry<Segment, ArrayList<Segment>> a : segmap.entrySet()){   
+                if (segment.containsAll(a.getValue())){
+                    segments_left.remove(a.getKey());
+                }
+            }
+        }
+        return segment;
     }
  
 }

@@ -2,11 +2,12 @@ import os
 from fileReader import readImage
 from fileReader import readTextFile
 import re
+import params
 
 path = os.path.dirname(os.path.abspath(__file__))
 
-optimalFolder = path + "/optimal_segments"  # you may have to specify the complete path
-studentFolder = path + "/student_segments" # you may have to specify the complete path
+optimalFolder = path + "/optimal_segments/" + str(params.IMAGE) # you may have to specify the complete path
+studentFolder = path + "/student_segments/" # you may have to specify the complete path
 colorValueSlackRange = 40
 blackValueThreshold = 100 # colors below 100 is black
 pixelRangeCheck = 4
