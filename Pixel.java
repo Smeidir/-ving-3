@@ -5,7 +5,7 @@ public class Pixel {
     Coordinate coords;
     int id;
     Ant ant;
-    Segment segment;
+    Segment segment =null;
     boolean sniffed = false;
 
     public Pixel(float R, float G, float B, int x, int y, int id){
@@ -37,7 +37,7 @@ public class Pixel {
         return coords;
     }
     public float[] get_feature_vector(){
-        return new float[]{0.5f*R, G, B};
+        return new float[]{3*R, G, B};
     }
     public void set_ant(Ant ant){
         this.ant = ant;
@@ -50,6 +50,11 @@ public class Pixel {
         double similarity = Math.sqrt(Math.pow(R-other.getR(),2) + Math.pow(G-other.getG(),2) + Math.pow(B-other.getB(),2));
         return similarity;
     }
-    
+    public boolean isAdj(Pixel other){
+        if (this.equals(other)){
+            return false;
+        }
+        return Math.abs(coords.getX()-other.getX()) <= 1 && Math.abs(coords.getY()-other.getY()) <= 1;
+    }
 
 }

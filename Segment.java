@@ -101,6 +101,7 @@ public class Segment {
             }
             
         }
+
         return new ArrayList<Pixel>(edge_pixels);
 
     }

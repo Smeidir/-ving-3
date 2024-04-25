@@ -6,7 +6,7 @@ import params
 
 path = os.path.dirname(os.path.abspath(__file__))
 
-optimalFolder = path + "/optimal_segments/" + str(params.IMAGE) # you may have to specify the complete path
+optimalFolder = path + "/optimal_segments/"# you may have to specify the complete path
 studentFolder = path + "/student_segments/" # you may have to specify the complete path
 colorValueSlackRange = 40
 blackValueThreshold = 100 # colors below 100 is black
@@ -70,22 +70,27 @@ def comparePics(studentPic, optimalSegmentPic):
 
 
 def main():
-	optimalFiles = readFilesFromFolder(optimalFolder)
-	studentFiles = readFilesFromFolder(studentFolder)
-	totalScore = 0
-	for student in studentFiles:
-		highestScore = 0
-		for opt in optimalFiles:
-			result1 = comparePics(opt,student)
-			result2 = comparePics(student,opt)
-#			print("PRI 1: %.2f" % result1)
-#			print("PRI 2: %.2f" % result2)
-			result = min(result1,result2)
-			highestScore = max(highestScore,result)
-		totalScore += highestScore
-		a = highestScore*100
-		print("Score: %.2f" % a + "%")
-	a = totalScore/len(studentFiles)*100
-	print("Total Average Score: %.2f" % a + "%")
+	with open('Project 3 evaluator/images.txt') as file:
+		for line in file:
+			optimalFolder = path + "/optimal_segments/" + line.strip() # you may have to specify the complete path
+			studentFolder = path + "/student_segments/" + line.strip()# you may have to specify the complete path	
+	
+			optimalFiles = readFilesFromFolder(optimalFolder)
+			studentFiles = readFilesFromFolder(studentFolder)
+			totalScore = 0
+			for student in studentFiles:
+				highestScore = 0
+				for opt in optimalFiles:
+					result1 = comparePics(opt,student)
+					result2 = comparePics(student,opt)
+		#			print("PRI 1: %.2f" % result1)
+		#			print("PRI 2: %.2f" % result2)
+					result = min(result1,result2)
+					highestScore = max(highestScore,result)
+				totalScore += highestScore
+				a = highestScore*100
+				print("Score: %.2f" % a + "%")
+			a = totalScore/len(studentFiles)*100
+			print("Total Average Score " + line.strip() + ": %.2f" % a + "%")
 
 main()

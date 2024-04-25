@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-class Main{ 
+class DumbMain{ 
     HashMap<Coordinate, Pixel> pixel_map = new HashMap<Coordinate, Pixel>();
     public static void main(String[] args) throws IOException{ 
         for (String s: Parameters.training_images){
+            
         
             FileWriter python_param = new FileWriter("Project 3 evaluator\\params.py");
             python_param.write("IMAGE = " + Integer.parseInt(s.replaceAll("[^0-9]", "").substring(1)));
@@ -15,15 +16,19 @@ class Main{
             String img_name = s;
             Image image = new Image(img_name);
             image.init();  
-            ArrayList<Ant> ants = new ArrayList<Ant>();
-            ants = image.ants;
+            ArrayList<Ant> dumbAnts = new ArrayList<Ant>();
+            for(Ant a: image.ants){
+                DumbAnt da = new DumbAnt(a.pixel, a.image);
+                dumbAnts.add(da);
+            }
+            image.ants = dumbAnts;
 
-            for (Ant ant : ants){
-                if (!ant.has_colony()){
+            for (Ant dumbAnt : dumbAnts){
+                if (!dumbAnt.has_colony()){
                     Segment segment = new Segment(image);
-                    ant.add_to_colony(segment);
+                    dumbAnt.add_to_colony(segment);
                     image.segments.add(segment);
-                    ant.sniff();
+                    dumbAnt.sniff();
                 }
             }
             ArrayList<Segment> segments_to_remove = new ArrayList<Segment>();
@@ -50,11 +55,11 @@ class Main{
             System.out.println(s + " Antall segmenter før: " + image.segments.size());
             image.segments.removeAll(segments_to_remove);
             System.out.println(s + " Antall segmenter etter: " +image.segments.size());
-            
+
             image.colorSegments();
 
-            image.saveSegmentation(s, false);
-            image.saveSegmentationGreen(s, false);
+            image.saveSegmentation(s, true );
+            image.saveSegmentationGreen(s, true);
 
         }
 }
