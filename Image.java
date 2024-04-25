@@ -53,11 +53,12 @@ public class Image {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        /* 
         for (Pixel p: pixel_map.values()){
             Ant ant = new Ant(p, this);
             p.set_ant(ant); //overlødig men hvem bryr seg. er init. bra for lesbarhet        
             ants.add(ant);   
-        }
+        }*/
     }
 
 

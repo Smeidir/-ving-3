@@ -2,6 +2,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 
 
 class Main{ 
@@ -13,19 +15,20 @@ class Main{
             python_param.write("IMAGE = " + Integer.parseInt(s.replaceAll("[^0-9]", "").substring(1)));
             python_param.close();
             String img_name = s;
+            Random rand = new Random();
             Image image = new Image(img_name);
             image.init();  
             ArrayList<Ant> ants = new ArrayList<Ant>();
-            ants = image.ants;
+            ArrayList<Pixel> remaining_pixels = new ArrayList<Pixel>(image.pixel_map.values());
 
-            for (Ant ant : ants){
-                if (!ant.has_colony()){
-                    Segment segment = new Segment(image);
-                    ant.add_to_colony(segment);
-                    image.segments.add(segment);
-                    ant.sniff();
-                }
+            while (remaining_pixels.size() > 0){
+                Pixel pixel = remaining_pixels.get(rand.nextInt(remaining_pixels.size()));
+                Ant ant = new DumbAnt(pixel, image);
+                ants.add(ant);
+                ant.sniff();
+                remaining_pixels.removeIf(x -> x.segment != null);
             }
+            
             ArrayList<Segment> segments_to_remove = new ArrayList<Segment>();
             for(Segment segment: image.segments){
                 

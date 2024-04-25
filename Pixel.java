@@ -56,5 +56,9 @@ public class Pixel {
         }
         return Math.abs(coords.getX()-other.getX()) <= 1 && Math.abs(coords.getY()-other.getY()) <= 1;
     }
+    public void addToSegment(Segment segment){
+        this.segment = segment;
+        segment.add_pixel(this);
+    }
 
 }
