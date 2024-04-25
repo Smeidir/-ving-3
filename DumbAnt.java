@@ -21,21 +21,20 @@ public class DumbAnt extends Ant{
             //dissimilarity += Distance.Euclidean(this.feature_vector, pixel.get_feature_vector());//ant diff, aka edge diff
             double neighbours = 0.0;
             double highest_edge = 0.0;
+            boolean has_neighbours = false;
             for (Pixel neighbour : image.get_neighbours(pixel.get_coords())){
-
-                if (neighbour.segment !=this.segment){
-                    neighbours += 2; //16 ganger høyere enn 1/8
-                }
-                else{
+                if (neighbour.segment ==this.segment){
+                    has_neighbours = true; //
                     if (Distance.Euclidean(neighbour.get_feature_vector(), pixel.get_feature_vector()) > highest_edge){
                         highest_edge = Distance.Euclidean(neighbour.get_feature_vector(), pixel.get_feature_vector());
                     }
                 }
+            
             }
             dissimilarity += highest_edge;
-            dissimilarity += neighbours;
+            dissimilarity += !has_neighbours? 16.0 : 0.0; //2 for alle som ikke er nabo
             
-            if (dissimilarity< Parameters.similarity_index){//er flere parametere så justerer
+            if (dissimilarity< Parameters.similarity_index*1.5){//er flere parametere så justerer
                 pixel.get_ant().add_to_colony(this.segment);
             }
             else{
