@@ -27,7 +27,7 @@ public class Ant{
         ArrayList<Pixel> neighbours = image.get_neighbours(current_coordinate);
         for (int i = 0; i < neighbours.size(); i++){
 
-            if (Distance.Euclidean(this.segment.get_centroid().get_feature_vector(), neighbours.get(i).get_feature_vector()) < Parameters.similarity_index && !neighbours.get(i).get_ant().has_colony()){
+            if (Distance.Euclidean(this.feature_vector, neighbours.get(i).get_feature_vector()) < Parameters.similarity_index && !neighbours.get(i).get_ant().has_colony()){
                 neighbours.get(i).get_ant().add_to_colony(this.segment);
                 ArrayList<Pixel> potential_neighbours = image.get_neighbours(neighbours.get(i).get_coords());
                 potential_neighbours.removeAll(neighbours); //if already in the list, we dont need to add them twice

@@ -8,11 +8,13 @@ class Main{
     HashMap<Coordinate, Pixel> pixel_map = new HashMap<Coordinate, Pixel>();
     public static void main(String[] args) throws IOException{ 
         for (String s: Parameters.training_images){
-        
+
+            System.out.println(s);
             FileWriter python_param = new FileWriter("Project 3 evaluator\\params.py");
             python_param.write("IMAGE = " + Integer.parseInt(s.replaceAll("[^0-9]", "").substring(1)));
             python_param.close();
             String img_name = s;
+            System.out.println(img_name);
             Image image = new Image(img_name);
             image.init();  
             ArrayList<Ant> ants = new ArrayList<Ant>();
@@ -48,7 +50,7 @@ class Main{
                     
                 }
             System.out.println(s + " Antall segmenter før: " + image.segments.size());
-            image.segments.removeAll(segments_to_remove);
+           //s image.segments.removeAll(segments_to_remove);
             System.out.println(s + " Antall segmenter etter: " +image.segments.size());
             
             image.colorSegments();
