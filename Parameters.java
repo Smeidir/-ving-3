@@ -7,7 +7,7 @@ public class Parameters {
     public static final int path_length = 30;
     public static final double delta = 0.12;
     public static final double threshhold_density = 0.5;
-    public static final double similarity_index =120;
+    public static final double similarity_index =160;
     public static final int max_segments = 300;
     public static final String[] training_images = {"Project 3 training_images\\111111\\Test image.jpg"};
     public static final float L_weight = 3f;
