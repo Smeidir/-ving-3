@@ -1,12 +1,15 @@
 import java.awt.Color;
+import java.awt.image.AreaAveragingScaleFilter;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -45,7 +48,6 @@ public class Image {
                     pixel_map.put(pixel.get_coords(), pixel);
                 }
             } 
-            System.out.println(this.checkAllCoordinates());
                 
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -134,18 +136,14 @@ public class Image {
     public void print_image(){ //ren copilot
          // Create a BufferedImage object with the same dimensions as the int[][] array
          BufferedImage image2 = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
          // Iterate over the int[][] array and set the pixel color based on the value
          for (int x = 0; x <width; x++) {
              for (int y = 0; y < height; y++) {
-
                  int value = visit_count[x][y];
                  Color color = new Color(value, 0, 0);
-
                  image2.setRGB(x, y, color.getRGB()); // Set the pixel color in the BufferedImage
              }
          }
- 
          // Save the BufferedImage as an image file
          try {
              File output = new File("output.png");
@@ -157,6 +155,155 @@ public class Image {
          }
 
         }
+    public void colorSegments() {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        for (Segment segment : segments) {
+            Color color = getRandomColor();
+            for (Pixel pixel : segment.pixels) {
+                image.setRGB(pixel.getX(), pixel.getY(), color.getRGB());
+            }
+        }
+
+        try {
+            File output = new File("output.png");
+            ImageIO.write(image, "png", output);
+            System.out.println("Image saved successfully.");
+        } catch (IOException e) {
+            System.out.println("Failed to save the image.");
+            e.printStackTrace();
+        }
+    }
+
+    private Color getRandomColor() {
+        Random random = new Random();
+        int red = random.nextInt(256);
+        int green = random.nextInt(256);
+        int blue = random.nextInt(256);
+        return new Color(red, green, blue);
+    }
+
+    public void saveSegmentation(String s, boolean dumb){
+        String result = dumb ? "dumb" : "";
+        String file_name = "Project 3 evaluator\\student_segments\\" +  "\\" + Integer.parseInt(s.replaceAll("[^0-9]", "").substring(1)) +"\\" +Integer.parseInt(s.replaceAll("[^0-9]", "").substring(1))+ result + "_border_segmented.jpg";  
+
+        
+        try{
+        BufferedImage outputImage = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (x == 0 || y == 0){
+                    outputImage.setRGB(x,y, 0);
+                }
+                else if (x == width-1 || y == height-1){
+                    outputImage.setRGB(x,y, 0);
+                }
+                /*else if((this.pixel_map.get(new Coordinate(x,y)).sniffed)){
+                    outputImage.setRGB(x,y, 0);
+                }
+                */ else {
+                    outputImage.setRGB(x, y, Color.WHITE.getRGB());
+                }
+            }
+        }
+        ArrayList<Pixel> edges = this.get_all_edges();
+        for (Pixel pixel : pixel_map.values()){
+            if(true){
+                if (edges.contains(pixel)){
+                    outputImage.setRGB(pixel.getX(),pixel.getY(), 0);
+                }
+            }
+        }
+
+
+        ImageIO.write(outputImage, "jpg", new File(file_name));
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+public void saveSegmentationGreen(String s, boolean dumb){
+    String result = dumb ? "dumb" : "";
+    String file_name = "Project 3 evaluator\\student_segments\\" + Integer.parseInt(s.replaceAll("[^0-9]", "").substring(1)) + "\\" +Integer.parseInt(s.replaceAll("[^0-9]", "").substring(1)) + result + "_green_segmented.jpg";  
+
+    
+    try{
+    BufferedImage imgBuffer = ImageIO.read(new File(image_name));
+    BufferedImage outputImage = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            if (x == 0 || y == 0){
+                outputImage.setRGB(x,y, Color.GREEN.getRGB());
+            }
+            else if (x == width-1 || y == height-1){
+                outputImage.setRGB(x,y, Color.GREEN.getRGB());
+            }
+           /* else if((this.pixel_map.get(new Coordinate(x,y)).sniffed)){
+                outputImage.setRGB(x,y, Color.GREEN.getRGB());
+            } */else {
+                outputImage.setRGB(x, y, imgBuffer.getRGB(x,y));
+            }
+        }
+    }
+    ArrayList<Pixel> edges = this.get_all_edges();
+    for (Pixel pixel : pixel_map.values()){
+        if(true){
+            if (edges.contains(pixel)){
+                outputImage.setRGB(pixel.getX(),pixel.getY(), Color.GREEN.getRGB());
+            }
+        }
+    }
+
+
+    ImageIO.write(outputImage, "jpg", new File(file_name));
+} catch (IOException e) {
+    e.printStackTrace();
+}
+}
+    public ArrayList<Pixel> get_all_edges(){
+        ArrayList<Pixel> edges = new ArrayList<>();
+        for (Segment s:this.segments){
+            ArrayList<Pixel> edges_to_add = new ArrayList<>();
+            for (Pixel p : s.get_edge_Pixels()){
+                if (!this.containsPixel(edges,this.get_neighbours(p.get_coords()))){
+                    edges_to_add.add(p);
+                }
+                
+            }
+            edges.addAll(edges_to_add);
+
+        }
+        return edges;
+
+    }
+    private boolean containsPixel(ArrayList<Pixel> pixels, ArrayList<Pixel> pixels2) {
+        for (Pixel p : pixels) {
+            if (pixels.contains(p)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public ArrayList<Segment> get_lowest_amount_segments(){
+        ArrayList<Segment> segment = new ArrayList<>();
+        HashMap<Segment, ArrayList<Segment>> segmap = new HashMap<>();
+        for (Segment s : this.segments){
+            segmap.put(s, s.get_neighbouring_segments());
+        }
+        ArrayList<Segment> segments_left = new ArrayList<>(this.segments);
+        while (segments_left.size()!= 0){
+            Segment next_segment = segments_left.stream().max((x,y) -> ((Integer)segmap.get(x).size()).compareTo(((Integer) segmap.get(y).size()))).orElse(null);
+            System.out.println(next_segment);
+            segment.add(next_segment);
+            segments_left.remove(next_segment);
+            for (Map.Entry<Segment, ArrayList<Segment>> a : segmap.entrySet()){   
+                if (segment.containsAll(a.getValue())){
+                    segments_left.remove(a.getKey());
+                }
+            }
+        }
+        return segment;
+    }
  
 }
 

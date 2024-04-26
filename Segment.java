@@ -1,9 +1,11 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Segment {
 
     ArrayList<Pixel> pixels = new ArrayList<Pixel>();  
     Image image;
+    Ant start_ant;
 
     public Segment(Image image){
         this.image = image;
@@ -34,7 +36,7 @@ public class Segment {
         double deviation = 0;
         Pixel centroid = this.get_centroid();
         for (Pixel pixel : pixels){
-            deviation += pixel.get_RGB_similarity(centroid);
+            deviation += pixel.get_RGB_dissimilarity(centroid);
         }
         return deviation;
     }
@@ -56,11 +58,52 @@ public class Segment {
             ArrayList<Pixel> neighbours = this.image.get_neighbours(pixel.get_coords());
             for (Pixel neighbour : neighbours){
                 if (!pixels.contains(neighbour)){
-                    edge_value += pixel.get_RGB_similarity(neighbour);
+                    edge_value += pixel.get_RGB_dissimilarity(neighbour);
                 }
             }
         }
         return edge_value;
+    }
+    public void add(Ant ant){
+        this.pixels.add(ant.get_pixel());
+        ant.pixel.segment = this;
+    }
+    public ArrayList<Pixel> get_neighbouring_pixels(){
+        ArrayList<Pixel> neighbouring_pixels = new ArrayList<Pixel>();
+        for (Pixel pixel : pixels){
+            ArrayList<Pixel> neighbours = this.image.get_neighbours(pixel.get_coords());
+            for (Pixel neighbour : neighbours){
+                if (!pixels.contains(neighbour)){
+                    neighbouring_pixels.add(neighbour);
+                }
+            }
+        }
+        return  neighbouring_pixels;
+
+    }
+
+    public ArrayList<Segment> get_neighbouring_segments(){
+        ArrayList<Segment> neighbouring_segments = new ArrayList<Segment>();
+        for (Pixel pixel: this.get_neighbouring_pixels()){
+            if (!neighbouring_segments.contains(pixel.segment)){
+                neighbouring_segments.add(pixel.segment);
+            }
+        }
+        return neighbouring_segments;
+    }
+    public ArrayList<Pixel> get_edge_Pixels(){
+        HashSet<Pixel> edge_pixels = new HashSet<Pixel>();
+        for (Pixel pixel : this.get_neighbouring_pixels()){//alle nabopixlene til segmentet
+            for (Pixel pot_edge : this.image.get_neighbours(pixel.get_coords())){ //naboene til naboene, altså de ytterse i segmentet og de lenger inn i fremmede segment
+                if (this.pixels.contains(pot_edge)){//hvis det er ytterst i segmentet
+                    edge_pixels.add(pot_edge); //legg til. Er set, så alle er bare med en gang.
+                }
+            }
+            
+        }
+
+        return new ArrayList<Pixel>(edge_pixels);
+
     }
 
     //TODO: fucntion get edge pixels?
