@@ -13,7 +13,7 @@ public class DumbAnt extends Ant{
 
 
     public void sniff(){
-        List<Pixel> remainingPixels = this.image.pixel_map.values().stream().filter(x -> x.ant.segment == null).collect(Collectors.toList());
+        List<Pixel> remainingPixels = this.image.pixel_map.values().stream().filter(x -> x.segment == null).collect(Collectors.toList());
         System.out.println(remainingPixels.size());
         for (Pixel pixel : remainingPixels){
             Pixel centroid = this.segment.get_centroid();

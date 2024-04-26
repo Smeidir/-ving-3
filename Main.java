@@ -23,10 +23,17 @@ class Main{
 
             while (remaining_pixels.size() > 0){
                 Pixel pixel = remaining_pixels.get(rand.nextInt(remaining_pixels.size()));
-                Ant ant = new DumbAnt(pixel, image);
+                Ant ant = new Ant(pixel, image);
                 ants.add(ant);
-                ant.sniff();
+                Segment segment = new Segment(image);
+                ant.segment = segment;
+                ant.pixel.addToSegment(segment);
+                image.segments.add(segment);
+                ant.sniff(remaining_pixels);
+ 
                 remaining_pixels.removeIf(x -> x.segment != null);
+
+                System.out.println(remaining_pixels.size());
             }
             
             ArrayList<Segment> segments_to_remove = new ArrayList<Segment>();
@@ -51,7 +58,7 @@ class Main{
                     
                 }
             System.out.println(s + " Antall segmenter før: " + image.segments.size());
-            image.segments.removeAll(segments_to_remove);
+            //image.segments.removeAll(segments_to_remove);
             System.out.println(s + " Antall segmenter etter: " +image.segments.size());
             
             image.colorSegments();

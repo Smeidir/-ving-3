@@ -1,5 +1,8 @@
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Ant{
     Pixel pixel;
@@ -23,21 +26,13 @@ public class Ant{
     public Pixel get_pixel(){
         return pixel;
     }
-    public void sniff(){
-        ArrayList<Pixel> neighbours = image.get_neighbours(current_coordinate);
-        for (int i = 0; i < neighbours.size(); i++){
+    public void sniff(ArrayList<Pixel> remaining){
+        List<Pixel> pixels = new ArrayList<Pixel> (remaining);
 
-            if (Distance.Euclidean(this.segment.get_centroid().get_feature_vector(), neighbours.get(i).get_feature_vector()) < Parameters.similarity_index && !neighbours.get(i).get_ant().has_colony()){
-                neighbours.get(i).addToSegment((this.segment));
-                ArrayList<Pixel> potential_neighbours = image.get_neighbours(neighbours.get(i).get_coords());
-                potential_neighbours.removeAll(neighbours); //if already in the list, we dont need to add them twice
-                potential_neighbours.removeAll(segment.get_pixels()); //if already in segment, we dont need to check
-                neighbours.addAll(potential_neighbours);
-            }
-            else if(Distance.Euclidean(this.pixel.get_feature_vector(), neighbours.get(i).get_feature_vector()) > Parameters.similarity_index && !neighbours.get(i).get_ant().has_colony()){
-                neighbours.get(i).sniffed = true;
-            }
-        }
+        pixels = pixels.stream().filter(x -> Distance.Euclidean(this.feature_vector, x.get_feature_vector()) < Parameters.similarity_index).collect(Collectors.toList());
+        this.segment.pixels.addAll(pixels);
+        pixels.stream().forEach(x -> x.segment = this.segment);
+            
     }
 
 

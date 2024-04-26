@@ -37,7 +37,7 @@ public class Pixel {
         return coords;
     }
     public float[] get_feature_vector(){
-        return new float[]{3*R, G, B};
+        return new float[]{Parameters.L_weight*R, G, B};
     }
     public void set_ant(Ant ant){
         this.ant = ant;

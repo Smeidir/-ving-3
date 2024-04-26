@@ -192,33 +192,27 @@ public class Image {
         try{
         BufferedImage outputImage = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (x == 0 || y == 0){
-                    outputImage.setRGB(x,y, 0);
-                }
+        /*         }
                 else if (x == width-1 || y == height-1){
                     outputImage.setRGB(x,y, 0);
                 }
-                /*else if((this.pixel_map.get(new Coordinate(x,y)).sniffed)){
+                else if((this.pixel_map.get(new Coordinate(x,y)).sniffed)){
                     outputImage.setRGB(x,y, 0);
                 }
-                */ else {
+                 else {
                     outputImage.setRGB(x, y, Color.WHITE.getRGB());
                 }
             }
-        }
+        } */
         ArrayList<Pixel> edges = this.get_all_edges();
-        for (Pixel pixel : pixel_map.values()){
-            if(true){
-                if (edges.contains(pixel)){
-                    outputImage.setRGB(pixel.getX(),pixel.getY(), 0);
-                }
-            }
+        for (Pixel pixel : edges){
+            
+            outputImage.setRGB(pixel.getX(),pixel.getY(), 0);
+
         }
 
 
-        ImageIO.write(outputImage, "jpg", new File(file_name));
+        ImageIO.write(outputImage, "jpg", new File("output_lined.jpg"));
     } catch (IOException e) {
         e.printStackTrace();
     }
@@ -256,7 +250,7 @@ public void saveSegmentationGreen(String s, boolean dumb){
     }
 
 
-    ImageIO.write(outputImage, "jpg", new File(file_name));
+    ImageIO.write(outputImage, "jpg", new File("output_green.jpg"));
 } catch (IOException e) {
     e.printStackTrace();
 }
